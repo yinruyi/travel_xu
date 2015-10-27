@@ -35,7 +35,7 @@ class treatment():
     def findCinnection(self, dataset):
         dataset = self.makeTuple(dataset)
         main_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')
-        #print main_attraction
+        print main_attraction
         print dataset[1]
 
         
@@ -46,7 +46,8 @@ class DataAnalysis(pretreatment, treatment):
 
 
 if __name__=='__main__':
-    data = DataAnalysis().read_txt(abspath+'//data//beijing_attraction.txt')#主要景点数据
+    #data = DataAnalysis().read_txt(abspath+'//data//beijing_attraction.txt')#主要景点数据
+    #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     data = DataAnalysis().findCinnection(data)
     #print data[0]
