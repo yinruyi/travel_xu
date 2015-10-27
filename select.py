@@ -37,6 +37,10 @@ class treatment():
         main_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')
         print main_attraction
         print dataset[1]
+        for i in dataset:
+            if i[0] in main_attraction and i[2] in main_attraction:
+                if float(i[5]) >= 0.4:
+                    print i
 
         
 
@@ -49,5 +53,6 @@ if __name__=='__main__':
     #data = DataAnalysis().read_txt(abspath+'//data//beijing_attraction.txt')#主要景点数据
     #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
+    #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findCinnection(data)
     #print data[0]
