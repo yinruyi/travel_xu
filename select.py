@@ -43,10 +43,16 @@ class treatment():
                 if float(i[5]) >= 0.4:
                     print i
 
-    def drawGraph(self, dataset):
+    def drawGraph(self, dataset, weight = 0):
+        #weight=1表示画有权重的图，weight=0表示画没有权重的图
         #dataset = [("1","2"),("1","3"),("1","4"),("1","5"),("4","5"),("4","6"),("5","6")]
+        #dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
         G = nx.Graph()
-        G.add_edges_from(dataset)
+        if weight == 0:
+            G.add_edges_from(dataset)
+        else:
+            dataset = [(i[0],i[1],1.0*i[2]*0.01) for i in dataset]
+            G.add_weighted_edges_from(dataset)
         pos = nx.spring_layout(G)
         nx.draw_networkx_nodes(G,pos)
         nx.draw_networkx_edges(G,pos)
@@ -69,5 +75,5 @@ if __name__=='__main__':
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findCinnection(data)
     #print data[0]
-    #dataset = [("1","2"),("1","3"),("1","4"),("1","5"),("4","5"),("4","6"),("5","6")]
-    #DataAnalysis().drawGraph(dataset)
+    dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
+    DataAnalysis().drawGraph(dataset,1)
