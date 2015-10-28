@@ -1,7 +1,8 @@
 #coding:utf-8
 import sys
 import os
-
+import networkx as nx
+import matplotlib.pyplot as plt
 reload(sys)
 sys.setdefaultencoding('utf-8')
 abspath = os.getcwd()
@@ -42,6 +43,18 @@ class treatment():
                 if float(i[5]) >= 0.4:
                     print i
 
+    def drawGraph(self, dataset):
+        #dataset = [("1","2"),("1","3"),("1","4"),("1","5"),("4","5"),("4","6"),("5","6")]
+        G = nx.Graph()
+        G.add_edges_from(dataset)
+        pos = nx.spring_layout(G)
+        nx.draw_networkx_nodes(G,pos)
+        nx.draw_networkx_edges(G,pos)
+        plt.axis('off')
+        plt.savefig("color_nodes.png")
+        plt.show()
+
+
         
 
 class DataAnalysis(pretreatment, treatment):
@@ -56,3 +69,5 @@ if __name__=='__main__':
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findCinnection(data)
     #print data[0]
+    #dataset = [("1","2"),("1","3"),("1","4"),("1","5"),("4","5"),("4","6"),("5","6")]
+    #DataAnalysis().drawGraph(dataset)
