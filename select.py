@@ -28,12 +28,12 @@ class pretreatment():
 class treatment():
     def __init__(self):
         pass
-    def makeTuple(self, dataset):
+    def makeTuple(self, dataset, mark = u" "):
         for i in xrange(len(dataset)):
-            dataset[i] = dataset[i].split()
+            dataset[i] = dataset[i].split(mark)
         return dataset
     
-    def findCinnection(self, dataset):
+    def findConnection(self, dataset):
         dataset = self.makeTuple(dataset)
         main_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')
         #print main_attraction
@@ -62,8 +62,25 @@ class treatment():
         plt.savefig("color_nodes.png")
         plt.show()
 
+    def findConnection_en(self):
+        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')
+        #print beijing_attraction_en
+        beijing_all_en = self.read_txt(abspath+'//data//beijing_en.txt')
+        #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
+        #print beijing_all_en[0].split(u"\t")
+        beijing_all_en = self.makeTuple(beijing_all_en,u"\t")
+        print beijing_all_en[0]
+        result = []
+        for i in beijing_all_en:
+            if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
+                if float(i[10]) >= 0.4:
+                    #print i
+                    result.append((i[7],i[8]))
+        print result
+        self.drawGraph(result)
 
-        
+
+
 
 class DataAnalysis(pretreatment, treatment):
     pass
@@ -75,8 +92,8 @@ if __name__=='__main__':
     #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
-    data = DataAnalysis().findCinnection(data)
-    print data
+    data = DataAnalysis().findConnection_en()
+    #print data
     #print data[0]
     #dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
-    DataAnalysis().drawGraph(data)
+    #DataAnalysis().drawGraph(data)

@@ -1,5 +1,4 @@
-﻿景点名称	频数	景点名称	频数	共现频数	MAXC	MINC	景点名称	景点名称	共现频数	MAXC	MINC
-天安门广场	1345	长安街	1388	1043	0.775464684	0.751440922	Tiananmen Square Tiananmen Guangchang	Chang an Street	1043	0.775464684	0.751440922
+﻿天安门广场	1345	长安街	1388	1043	0.775464684	0.751440922	Tiananmen Square Tiananmen Guangchang	Chang an Street	1043	0.775464684	0.751440922
 故宫	1155	天安门广场	1345	800	0.692640693	0.594795539	The Palace Museum	Tiananmen Square Tiananmen Guangchang	800	0.692640693	0.594795539
 故宫	1155	长安街	1388	742	0.642424242	0.534582133	The Palace Museum	Chang an Street	742	0.642424242	0.534582133
 天坛	1115	天安门广场	1345	513	0.460089686	0.381412639	Temple of Heaven Tiantan Park	Tiananmen Square Tiananmen Guangchang	513	0.460089686	0.381412639
