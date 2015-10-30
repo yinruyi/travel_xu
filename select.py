@@ -36,12 +36,14 @@ class treatment():
     def findCinnection(self, dataset):
         dataset = self.makeTuple(dataset)
         main_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')
-        print main_attraction
-        print dataset[1]
+        #print main_attraction
+        #print dataset[1]
+        result = []
         for i in dataset:
             if i[0] in main_attraction and i[2] in main_attraction:
-                if float(i[5]) >= 0.4:
-                    print i
+                if float(i[5]) >= 0.8:
+                    result.append((i[0],i[2]))
+        return result
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
@@ -74,6 +76,7 @@ if __name__=='__main__':
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findCinnection(data)
+    print data
     #print data[0]
-    dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
-    DataAnalysis().drawGraph(dataset,1)
+    #dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
+    DataAnalysis().drawGraph(data)
