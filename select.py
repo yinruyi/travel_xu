@@ -97,16 +97,14 @@ class treatment():
                     if temp[0] in beijing_attraction_en:
                         connection_candidate.append([j[7],j[8],j[10],j[11]])
             print connection_candidate
+            break
 
-<<<<<<< HEAD
+
     def findSingleConnection(self, dataset):
         if len(dataset) <= 1:
             return "error"
         import numpy as np
-=======
 
-            break
->>>>>>> origin/master
 
 
         
