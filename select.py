@@ -3,6 +3,8 @@ import sys
 import os
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
+from numpy import * 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 abspath = os.getcwd()
@@ -95,15 +97,33 @@ class treatment():
                 if i in temp:
                     temp.remove(i)
                     if temp[0] in beijing_attraction_en:
-                        connection_candidate.append([j[7],j[8],j[10],j[11]])
+                        connection_candidate.append([j[7],j[8],float(j[10]),float(j[11])])
             print connection_candidate
+            if len(connection_candidate) == 0:
+                pass
+            elif len(connection_candidate) == 1:
+                connection.append((connection_candidate[0][0],connection_candidate[0][1]))
+            else:
+                self.rankConnection(connection_candidate)
+                #connection.append()
             break
 
 
-    def findSingleConnection(self, dataset):
+    def rankConnection(self, dataset):
         if len(dataset) <= 1:
             return "error"
-        import numpy as np
+        #print dataset
+        print len(dataset)
+        dataset = np.array(dataset)
+        print dataset
+        dataset = dataset.sort(axis=0)
+        print dataset
+        def npRank(dataset, k):
+            k = [k for i in xrange(len(dataset[0]))]
+            temp = dataset.T[array(k)]
+            temp = np.lexsort(temp)
+            dataset = dataset[temp]
+            return dataset
 
 
 
