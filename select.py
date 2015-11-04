@@ -63,7 +63,7 @@ class treatment():
         plt.show()
 
     def findConnection_en(self):
-        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')
+        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')#北京主要景点
         #print beijing_attraction_en
         beijing_all_en = self.read_txt(abspath+'//data//beijing_en.txt')
         #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
@@ -73,13 +73,29 @@ class treatment():
         result = []
         for i in beijing_all_en:
             if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
-                if float(i[10]) >= 0.4:#阈值
+                if float(i[10]) >= 0.5:#阈值
                     #print i
                     result.append((i[7],i[8]))
         #print result
         #self.drawGraph(result)#画图
         result = self.joinResult(result)#归类
-        print result
+        #print len(result)#归类数目
+        #---------------景点归类完成------------------
+        beijing_attraction_other = []
+        for i in beijing_all_en:
+            beijing_attraction_other.extend([i[7],i[8]])
+        beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction_en))
+        #北京次要景点
+        connection = []#次要景点和主要景点之间的联系
+        for i in beijing_attraction_other:
+            print i
+            break
+
+
+        
+
+
+
 
     def joinResult(self, dataset):
         #[(1,2),(2,3),(3,4),(5,6)]
