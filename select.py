@@ -89,6 +89,16 @@ class treatment():
         connection = []#次要景点和主要景点之间的联系
         for i in beijing_attraction_other:
             print i
+            connection_candidate = []#第i次要景点候选和主要景点连接
+            for j in beijing_all_en:
+                temp = [j[7],j[8]]
+                if i in temp:
+                    temp.remove(i)
+                    if temp[0] in beijing_attraction_en:
+                        connection_candidate.append([j[7],j[8],j[10],j[11]])
+            print connection_candidate
+
+
             break
 
 
@@ -98,7 +108,7 @@ class treatment():
 
 
     def joinResult(self, dataset):
-        #[(1,2),(2,3),(3,4),(5,6)]
+        #[(1,2),(2,3),(3,4),(5,6)] -> [[1,2,3,4],[5,6]]
         dataset = [list(i) for i in dataset]
         for i in xrange(len(dataset)-1):
             for j in xrange(i+1,len(dataset)):
@@ -126,9 +136,7 @@ def main():
     data = DataAnalysis().findConnection_en()
 
 def test():
-    dataset = [(1,2),(2,3),(3,4),(5,6)]
-    dataset = DataAnalysis().joinResult(dataset)
-    print dataset
+    pass
 
 
 if __name__=='__main__':
