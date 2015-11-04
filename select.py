@@ -63,40 +63,91 @@ class treatment():
         plt.show()
 
     def findConnection_en(self):
-        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')
+        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')#北京主要景点
         #print beijing_attraction_en
         beijing_all_en = self.read_txt(abspath+'//data//beijing_en.txt')
         #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
         #print beijing_all_en[0].split(u"\t")
         beijing_all_en = self.makeTuple(beijing_all_en,u"\t")
-        print beijing_all_en[0]
+        #print beijing_all_en[0]
         result = []
         for i in beijing_all_en:
             if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
-                if float(i[10]) >= 0.4:
+                if float(i[10]) >= 0.5:#阈值
                     #print i
                     result.append((i[7],i[8]))
-        print result
-        self.drawGraph(result)
+        #print result
+        #self.drawGraph(result)#画图
+        result = self.joinResult(result)#归类
+        #print len(result)#归类数目
+        #---------------景点归类完成------------------
+        beijing_attraction_other = []
+        for i in beijing_all_en:
+            beijing_attraction_other.extend([i[7],i[8]])
+        beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction_en))
+        #北京次要景点
+        connection = []#次要景点和主要景点之间的联系
+        for i in beijing_attraction_other:
+            print i
+            connection_candidate = []#第i次要景点候选和主要景点连接
+            for j in beijing_all_en:
+                temp = [j[7],j[8]]
+                if i in temp:
+                    temp.remove(i)
+                    if temp[0] in beijing_attraction_en:
+                        connection_candidate.append([j[7],j[8],j[10],j[11]])
+            print connection_candidate
 
+<<<<<<< HEAD
     def findSingleConnection(self, dataset):
         if len(dataset) <= 1:
             return "error"
         import numpy as np
+=======
+
+            break
+>>>>>>> origin/master
+
+
+        
+
+
+
+
+    def joinResult(self, dataset):
+        #[(1,2),(2,3),(3,4),(5,6)] -> [[1,2,3,4],[5,6]]
+        dataset = [list(i) for i in dataset]
+        for i in xrange(len(dataset)-1):
+            for j in xrange(i+1,len(dataset)):
+                #print (i,j)
+                if len(set(dataset[i]) & set(dataset[j])) != 0:
+                    dataset[i] = list((set(dataset[i]) | set(dataset[j])))
+                    dataset[j] = []
+        new_dataset = []
+        for i in xrange(len((dataset))):
+            if dataset[i] != []:
+                new_dataset.append(dataset[i])
+        return new_dataset
+
+
 
 
 class DataAnalysis(pretreatment, treatment):
     pass
 
-
-
-if __name__=='__main__':
+def main():
     #data = DataAnalysis().read_txt(abspath+'//data//beijing_attraction.txt')#主要景点数据
     #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findConnection_en()
-    #print data
-    #print data[0]
-    #dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
-    #DataAnalysis().drawGraph(data)
+
+def test():
+    pass
+
+
+if __name__=='__main__':
+    main()
+    #test()
+
+
