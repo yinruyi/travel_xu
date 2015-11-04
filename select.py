@@ -73,11 +73,22 @@ class treatment():
         result = []
         for i in beijing_all_en:
             if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
-                if float(i[10]) >= 0.4:
+                if float(i[10]) >= 0.4:#阈值
                     #print i
                     result.append((i[7],i[8]))
         print result
-        self.drawGraph(result)
+        #self.drawGraph(result)
+        #for i in result:
+
+    def joinResult(self, dataset):
+        #[(1,2),(2,3),(3,4),(5,6)]
+        for i in xrange(len(dataset)-1):
+            for j in xrange(i+1,len(dataset)):
+                print (i,j)
+
+
+
+
 
 
 
@@ -85,15 +96,17 @@ class treatment():
 class DataAnalysis(pretreatment, treatment):
     pass
 
-
-
-if __name__=='__main__':
+def main():
     #data = DataAnalysis().read_txt(abspath+'//data//beijing_attraction.txt')#主要景点数据
     #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
     data = DataAnalysis().findConnection_en()
-    #print data
-    #print data[0]
-    #dataset = [("1","2",1),("1","3",4),("1","4",5),("1","5",8),("4","5",7),("4","6",10),("5","6",8)]
-    #DataAnalysis().drawGraph(data)
+
+def test():
+
+
+if __name__=='__main__':
+    main()
+
+
