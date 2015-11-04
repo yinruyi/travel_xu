@@ -79,7 +79,10 @@ class treatment():
         print result
         self.drawGraph(result)
 
-
+    def findSingleConnection(self, dataset):
+        if len(dataset) <= 1:
+            return "error"
+        import numpy as np
 
 
 class DataAnalysis(pretreatment, treatment):
