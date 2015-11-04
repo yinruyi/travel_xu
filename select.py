@@ -69,26 +69,32 @@ class treatment():
         #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
         #print beijing_all_en[0].split(u"\t")
         beijing_all_en = self.makeTuple(beijing_all_en,u"\t")
-        print beijing_all_en[0]
+        #print beijing_all_en[0]
         result = []
         for i in beijing_all_en:
             if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
                 if float(i[10]) >= 0.4:#阈值
                     #print i
                     result.append((i[7],i[8]))
+        #print result
+        #self.drawGraph(result)#画图
+        result = self.joinResult(result)#归类
         print result
-        #self.drawGraph(result)
-        #for i in result:
 
     def joinResult(self, dataset):
         #[(1,2),(2,3),(3,4),(5,6)]
+        dataset = [list(i) for i in dataset]
         for i in xrange(len(dataset)-1):
             for j in xrange(i+1,len(dataset)):
-                print (i,j)
-
-
-
-
+                #print (i,j)
+                if len(set(dataset[i]) & set(dataset[j])) != 0:
+                    dataset[i] = list((set(dataset[i]) | set(dataset[j])))
+                    dataset[j] = []
+        new_dataset = []
+        for i in xrange(len((dataset))):
+            if dataset[i] != []:
+                new_dataset.append(dataset[i])
+        return new_dataset
 
 
 
@@ -104,9 +110,13 @@ def main():
     data = DataAnalysis().findConnection_en()
 
 def test():
+    dataset = [(1,2),(2,3),(3,4),(5,6)]
+    dataset = DataAnalysis().joinResult(dataset)
+    print dataset
 
 
 if __name__=='__main__':
     main()
+    #test()
 
 
