@@ -104,9 +104,11 @@ class treatment():
             elif len(connection_candidate) == 1:
                 connection.append((connection_candidate[0][0],connection_candidate[0][1]))
             else:
-                self.rankConnection(connection_candidate)
-                #connection.append()
-            break
+                print self.rankConnection(connection_candidate)
+                connection.append(self.rankConnection(connection_candidate))
+        print connection
+        print len(connection)
+            #break
 
 
     def rankConnection(self, dataset):
@@ -123,13 +125,17 @@ class treatment():
             dataset = dataset[temp]
             return dataset
         dataset = npRank(dataset, 2)
-        print dataset
-        print dataset[-1]
-        print dataset[-2]
+        if dataset[-1][2] != dataset[-2][2]:
+            #print (dataset[-1][0],dataset[-1][1])
+            return (dataset[-1][0],dataset[-1][1])
+        else:
+            new_dataset = []
+            for i in dataset:
+                if i[2] == dataset[-1][2]:
+                    new_dataset.append(i)
+            new_dataset = npRank(new_dataset, 3)
+            return (new_dataset[0][0],new_dataset[0][1])#如果maxc一样，找minc小的那个
 
-
-
-        
 
 
 
