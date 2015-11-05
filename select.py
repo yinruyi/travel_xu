@@ -98,7 +98,7 @@ class treatment():
                     temp.remove(i)
                     if temp[0] in beijing_attraction_en:
                         connection_candidate.append([j[7],j[8],float(j[10]),float(j[11])])
-            print connection_candidate
+            #print connection_candidate
             if len(connection_candidate) == 0:
                 pass
             elif len(connection_candidate) == 1:
@@ -113,17 +113,19 @@ class treatment():
         if len(dataset) <= 1:
             return "error"
         #print dataset
-        print len(dataset)
+        #print len(dataset)
         dataset = np.array(dataset)
-        print dataset
-        dataset = dataset.sort(axis=0)
-        print dataset
+        #print dataset
         def npRank(dataset, k):
             k = [k for i in xrange(len(dataset[0]))]
             temp = dataset.T[array(k)]
             temp = np.lexsort(temp)
             dataset = dataset[temp]
             return dataset
+        dataset = npRank(dataset, 2)
+        print dataset
+        print dataset[-1]
+        print dataset[-2]
 
 
 
