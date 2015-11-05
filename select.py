@@ -117,14 +117,17 @@ class treatment():
         #print dataset
         #print len(dataset)
         dataset = np.array(dataset)
-        #print dataset
+        print dataset
         def npRank(dataset, k):
             k = [k for i in xrange(len(dataset[0]))]
+            print type(dataset)
             temp = dataset.T[array(k)]
             temp = np.lexsort(temp)
             dataset = dataset[temp]
             return dataset
         dataset = npRank(dataset, 2)
+        print dataset
+        print "****"
         if dataset[-1][2] != dataset[-2][2]:
             #print (dataset[-1][0],dataset[-1][1])
             return (dataset[-1][0],dataset[-1][1])
@@ -133,6 +136,7 @@ class treatment():
             for i in dataset:
                 if i[2] == dataset[-1][2]:
                     new_dataset.append(i)
+            print new_dataset
             new_dataset = npRank(new_dataset, 3)
             return (new_dataset[0][0],new_dataset[0][1])#如果maxc一样，找minc小的那个
 
