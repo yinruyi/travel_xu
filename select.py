@@ -119,6 +119,10 @@ class treatment():
         dataset = np.array(dataset)
         print dataset
         def npRank(dataset, k):
+            print "$$$$"
+            print dataset
+            print "&&&&&"
+            dataset = np.array(dataset)
             k = [k for i in xrange(len(dataset[0]))]
             print type(dataset)
             temp = dataset.T[array(k)]
