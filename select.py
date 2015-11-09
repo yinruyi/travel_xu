@@ -36,16 +36,49 @@ class treatment():
         return dataset
     
     def findConnection(self, dataset):
-        dataset = self.makeTuple(dataset)
-        main_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')
-        #print main_attraction
-        #print dataset[1]
+        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')#北京主要景点
+        #print beijing_attraction_en
+        beijing_all_en = self.read_txt(abspath+'//data//beijing_en.txt')
+        #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
+        #print beijing_all_en[0].split(u"\t")
+        beijing_all_en = self.makeTuple(beijing_all_en,u"\t")
+        #print beijing_all_en[0]
         result = []
-        for i in dataset:
-            if i[0] in main_attraction and i[2] in main_attraction:
-                if float(i[5]) >= 0.8:
-                    result.append((i[0],i[2]))
-        return result
+        for i in beijing_all_en:
+            if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
+                if float(i[10]) >= 0.5:#阈值
+                    #print i
+                    result.append((i[7],i[8]))
+        #print result
+        #self.drawGraph(result)#画图
+        result = self.joinResult(result)#归类
+        #print len(result)#归类数目
+        #---------------景点归类完成------------------
+        beijing_attraction_other = []
+        for i in beijing_all_en:
+            beijing_attraction_other.extend([i[7],i[8]])
+        beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction_en))
+        #北京次要景点
+        connection = []#次要景点和主要景点之间的联系
+        for i in beijing_attraction_other:
+            print i
+            connection_candidate = []#第i次要景点候选和主要景点连接
+            for j in beijing_all_en:
+                temp = [j[7],j[8]]
+                if i in temp:
+                    temp.remove(i)
+                    if temp[0] in beijing_attraction_en:
+                        connection_candidate.append([j[7],j[8],float(j[10]),float(j[11])])
+            #print connection_candidate
+            if len(connection_candidate) == 0:
+                pass
+            elif len(connection_candidate) == 1:
+                connection.append((connection_candidate[0][0],connection_candidate[0][1]))
+            else:
+                print self.rankConnection(connection_candidate)
+                connection.append(self.rankConnection(connection_candidate))
+        print connection
+        print len(connection)
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
