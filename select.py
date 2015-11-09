@@ -46,12 +46,12 @@ class treatment():
         result = []
         for i in beijing_all_en:
             if i[0] in beijing_attraction and i[2] in beijing_attraction:
-                if float(i[5]) >= 0.5:#阈值
+                if float(i[5]) >= 0.5:#阈值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     #print i
-                    result.append((i[0],i[2]))
+                    result.append((i[0],i[2],i[5],i[6],"1"))#(景点1，景点2，maxc,minc，“main”)
         #print result
         #self.drawGraph(result)#画图
-        result = self.joinResult(result)#归类
+        kind = self.joinResult(result)#归类
         #print len(result)#归类数目
         #---------------景点归类完成------------------
         beijing_attraction_other = []
