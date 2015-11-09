@@ -35,9 +35,9 @@ class treatment():
             dataset[i] = dataset[i].split(mark)
         return dataset
     
-    def findConnection(self, dataset):
-        beijing_attraction_en = self.read_txt(abspath+'//data//beijing_attraction_en.txt')#北京主要景点
-        #print beijing_attraction_en
+    def findConnection(self):
+        beijing_attraction = self.read_txt(abspath+'//data//beijing_attraction.txt')#北京主要景点
+        #print beijing_attraction
         beijing_all_en = self.read_txt(abspath+'//data//beijing_en.txt')
         #景点名称   频数  景点名称    频数  共现频数    MAXC    MINC    景点名称    景点名称    共现频数    MAXC    MINC
         #print beijing_all_en[0].split(u"\t")
@@ -45,10 +45,10 @@ class treatment():
         #print beijing_all_en[0]
         result = []
         for i in beijing_all_en:
-            if i[7] in beijing_attraction_en and i[8] in beijing_attraction_en:
-                if float(i[10]) >= 0.5:#阈值
+            if i[0] in beijing_attraction and i[2] in beijing_attraction:
+                if float(i[5]) >= 0.5:#阈值
                     #print i
-                    result.append((i[7],i[8]))
+                    result.append((i[0],i[2]))
         #print result
         #self.drawGraph(result)#画图
         result = self.joinResult(result)#归类
@@ -56,26 +56,28 @@ class treatment():
         #---------------景点归类完成------------------
         beijing_attraction_other = []
         for i in beijing_all_en:
-            beijing_attraction_other.extend([i[7],i[8]])
-        beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction_en))
+            beijing_attraction_other.extend([i[0],i[2]])
+        beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction))
+        print beijing_attraction_other
+        print len(beijing_attraction_other)
         #北京次要景点
         connection = []#次要景点和主要景点之间的联系
         for i in beijing_attraction_other:
-            print i
+            #print i
             connection_candidate = []#第i次要景点候选和主要景点连接
             for j in beijing_all_en:
-                temp = [j[7],j[8]]
+                temp = [j[0],j[2]]
                 if i in temp:
                     temp.remove(i)
-                    if temp[0] in beijing_attraction_en:
-                        connection_candidate.append([j[7],j[8],float(j[10]),float(j[11])])
+                    if temp[0] in beijing_attraction:
+                        connection_candidate.append([j[0],j[2],float(j[5]),float(j[6])])
             #print connection_candidate
             if len(connection_candidate) == 0:
                 pass
             elif len(connection_candidate) == 1:
                 connection.append((connection_candidate[0][0],connection_candidate[0][1]))
             else:
-                print self.rankConnection(connection_candidate)
+                #print self.rankConnection(connection_candidate)
                 connection.append(self.rankConnection(connection_candidate))
         print connection
         print len(connection)
@@ -120,10 +122,12 @@ class treatment():
         for i in beijing_all_en:
             beijing_attraction_other.extend([i[7],i[8]])
         beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction_en))
+        print beijing_attraction_other
+        print len(beijing_attraction_other)
         #北京次要景点
         connection = []#次要景点和主要景点之间的联系
         for i in beijing_attraction_other:
-            print i
+            #print i
             connection_candidate = []#第i次要景点候选和主要景点连接
             for j in beijing_all_en:
                 temp = [j[7],j[8]]
@@ -137,7 +141,7 @@ class treatment():
             elif len(connection_candidate) == 1:
                 connection.append((connection_candidate[0][0],connection_candidate[0][1]))
             else:
-                print self.rankConnection(connection_candidate)
+                #print self.rankConnection(connection_candidate)
                 connection.append(self.rankConnection(connection_candidate))
         print connection
         print len(connection)
@@ -150,21 +154,21 @@ class treatment():
         #print dataset
         #print len(dataset)
         dataset = np.array(dataset)
-        print dataset
+        #print dataset
         def npRank(dataset, k):
-            print "$$$$"
-            print dataset
-            print "&&&&&"
+            #print "$$$$"
+            #print dataset
+            #print "&&&&&"
             dataset = np.array(dataset)
             k = [k for i in xrange(len(dataset[0]))]
-            print type(dataset)
+            #print type(dataset)
             temp = dataset.T[array(k)]
             temp = np.lexsort(temp)
             dataset = dataset[temp]
             return dataset
         dataset = npRank(dataset, 2)
-        print dataset
-        print "****"
+        #print dataset
+        #print "****"
         if dataset[-1][2] != dataset[-2][2]:
             #print (dataset[-1][0],dataset[-1][1])
             return (dataset[-1][0],dataset[-1][1])
@@ -173,7 +177,7 @@ class treatment():
             for i in dataset:
                 if i[2] == dataset[-1][2]:
                     new_dataset.append(i)
-            print new_dataset
+            #print new_dataset
             new_dataset = npRank(new_dataset, 3)
             return (new_dataset[0][0],new_dataset[0][1])#如果maxc一样，找minc小的那个
 
@@ -207,7 +211,10 @@ def main():
     #print data
     data = DataAnalysis().read_txt(abspath+"//data//beijing_all.txt")#景点与景点之间的联系数据
     #[景点1,景点1次数,景点2,景点2次数,共同出现,mc,minc]
-    data = DataAnalysis().findConnection_en()
+    #英文
+    #data = DataAnalysis().findConnection_en()
+    #中文
+    data = DataAnalysis().findConnection()
 
 def test():
     pass
