@@ -91,26 +91,58 @@ class treatment():
         #print result
         #print len(result)
         #print kind
+        def plusKind(kind,result):
+            for i in xrange(len(kind)):
+                for j in xrange(len(result)):
+                    #print result[j][0],kind[i]
+                    #if result[j][0] in kind[i]:
+                    #    print '*'
+                    
+                    if result[j][0] in kind[i]:
+                        temp = list(result[j])
+                        temp.append(str(i))
+                        result[j] = temp
+                    else:
+                        if result[j][1] in kind[i]:
+                            temp = list(result[j])
+                            temp.append(str(i))
+                            result[j] = temp
+                        else:
+                            pass
+            return result
+        result = plusKind(kind,result)     
+            #break
+        #break
+        #print str(type(result[0]))
+        test_result = []
+        for i in result:
+            if str(type(i)) == "<type 'list'>":
+                pass
+            else:
+                #print i
+                #pass
+                test_result.append(i)
+        print test_result
+        
         for i in xrange(len(kind)):
-            for j in xrange(len(result)):
+            for j in xrange(len(test_result)):
                 #print result[j][0],kind[i]
                 #if result[j][0] in kind[i]:
                 #    print '*'
                 
                 if result[j][0] in kind[i]:
-                    temp = list(result[j])
+                    temp = list(test_result[j])
                     temp.append(str(i))
-                    result[j] = temp
+                    test_result[j] = temp
                 else:
                     if result[j][1] in kind[i]:
-                        temp = list(result[j])
+                        temp = list(test_result[j])
                         temp.append(str(i))
-                        result[j] = temp
+                        test_result[j] = temp
                     else:
                         pass
-                
-            #break
-        #break
+        print "____"
+        print test_result
         return result
 
     def drawGraph(self, dataset, weight = 0):
@@ -246,16 +278,19 @@ def main():
     #data = DataAnalysis().findConnection_en()
     #中文
     data = DataAnalysis().findConnection()
+    '''
     print data
     for i in xrange(len(data)):
-        #print data[i]
-        data[i][2],data[i][3] = str(data[i][2]),str(data[i][3])
+        print data[i]
+        print type(data[i])
+        data[i][2] = str(data[i][2])
+        data[i][3] = str(data[i][3])
         print data[i]
         #break
     for i in xrange(len(data)):
         data[i] = ",".join(data[i])
     print data
-
+    '''
 def test():
     pass
 
