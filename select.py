@@ -51,15 +51,16 @@ class treatment():
                     result.append((i[0],i[2],i[5],i[6],"1"))#(景点1，景点2，maxc,minc，“main”)
         #print result
         #self.drawGraph(result)#画图
-        kind = self.joinResult(result)#归类
+        kind = self.joinResult([(i[0],i[1]) for i in result])#归类
+        print kind
         #print len(result)#归类数目
         #---------------景点归类完成------------------
         beijing_attraction_other = []
         for i in beijing_all_en:
             beijing_attraction_other.extend([i[0],i[2]])
         beijing_attraction_other = list(set(beijing_attraction_other) - set(beijing_attraction))
-        print beijing_attraction_other
-        print len(beijing_attraction_other)
+        #print beijing_attraction_other
+        #print len(beijing_attraction_other)
         #北京次要景点
         connection = []#次要景点和主要景点之间的联系
         for i in beijing_attraction_other:
@@ -75,12 +76,29 @@ class treatment():
             if len(connection_candidate) == 0:
                 pass
             elif len(connection_candidate) == 1:
-                connection.append((connection_candidate[0][0],connection_candidate[0][1]))
+                connection.append((connection_candidate[0][0],connection_candidate[0][1],connection_candidate[0][2],connection_candidate[0][3],"0"))
             else:
                 #print self.rankConnection(connection_candidate)
                 connection.append(self.rankConnection(connection_candidate))
-        print connection
-        print len(connection)
+        #print connection
+        #print len(connection)
+        for i in connection:
+            result.append(i)
+        print "**********"
+        print result
+        print len(result)
+        print kind
+        for i in xrange(len(kind)):
+            for j in xrange(len(result)):
+                if result[j][0] in kind[i]:
+                    result[j] = list(result[j]).append(i)
+                else:
+                    if result[j][1] in kind[i]:
+                        result[j] = list(result[j]).append(i)
+                    else:
+                        pass
+            #break
+        print result
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
@@ -171,7 +189,7 @@ class treatment():
         #print "****"
         if dataset[-1][2] != dataset[-2][2]:
             #print (dataset[-1][0],dataset[-1][1])
-            return (dataset[-1][0],dataset[-1][1])
+            return (dataset[-1][0],dataset[-1][1],dataset[-1][2],dataset[-1][3],"0")
         else:
             new_dataset = []
             for i in dataset:
@@ -179,7 +197,7 @@ class treatment():
                     new_dataset.append(i)
             #print new_dataset
             new_dataset = npRank(new_dataset, 3)
-            return (new_dataset[0][0],new_dataset[0][1])#如果maxc一样，找minc小的那个
+            return (new_dataset[0][0],new_dataset[0][1],new_dataset[0][2],new_dataset[0][3],"0")#如果maxc一样，找minc小的那个
 
 
 
