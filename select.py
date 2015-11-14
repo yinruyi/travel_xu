@@ -26,7 +26,7 @@ class pretreatment():
 
     def writefile(self, dataset):
         pass
-        
+
     def test():
     	pass
 
@@ -99,12 +99,12 @@ class treatment():
                 
                 if result[j][0] in kind[i]:
                     temp = list(result[j])
-                    temp.append(i)
+                    temp.append(str(i))
                     result[j] = temp
                 else:
                     if result[j][1] in kind[i]:
                         temp = list(result[j])
-                        temp.append(i)
+                        temp.append(str(i))
                         result[j] = temp
                     else:
                         pass
@@ -246,6 +246,14 @@ def main():
     #data = DataAnalysis().findConnection_en()
     #中文
     data = DataAnalysis().findConnection()
+    print data
+    for i in xrange(len(data)):
+        #print data[i]
+        data[i][2],data[i][3] = str(data[i][2]),str(data[i][3])
+        print data[i]
+        #break
+    for i in xrange(len(data)):
+        data[i] = ",".join(data[i])
     print data
 
 def test():
