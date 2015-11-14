@@ -90,15 +90,23 @@ class treatment():
         print kind
         for i in xrange(len(kind)):
             for j in xrange(len(result)):
+                #print result[j][0],kind[i]
+                #if result[j][0] in kind[i]:
+                #    print '*'
+                
                 if result[j][0] in kind[i]:
-                    result[j] = list(result[j]).append(i)
+                    temp = list(result[j])
+                    result[j] = temp.append(i)
                 else:
                     if result[j][1] in kind[i]:
-                        result[j] = list(result[j]).append(i)
+                        temp = list(result[j])
+                        result[j] = temp.append(i)
                     else:
                         pass
+                
             #break
-        print result
+        #break
+        #print result
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
