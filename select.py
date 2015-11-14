@@ -24,6 +24,9 @@ class pretreatment():
             dataset.append(line)
         return dataset
 
+    def writefile(self, dataset):
+        pass
+        
     def test():
     	pass
 
@@ -84,10 +87,10 @@ class treatment():
         #print len(connection)
         for i in connection:
             result.append(i)
-        print "**********"
-        print result
-        print len(result)
-        print kind
+        #print "**********"
+        #print result
+        #print len(result)
+        #print kind
         for i in xrange(len(kind)):
             for j in xrange(len(result)):
                 #print result[j][0],kind[i]
@@ -96,17 +99,19 @@ class treatment():
                 
                 if result[j][0] in kind[i]:
                     temp = list(result[j])
-                    result[j] = temp.append(i)
+                    temp.append(i)
+                    result[j] = temp
                 else:
                     if result[j][1] in kind[i]:
                         temp = list(result[j])
-                        result[j] = temp.append(i)
+                        temp.append(i)
+                        result[j] = temp
                     else:
                         pass
                 
             #break
         #break
-        #print result
+        return result
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
@@ -241,6 +246,7 @@ def main():
     #data = DataAnalysis().findConnection_en()
     #中文
     data = DataAnalysis().findConnection()
+    print data
 
 def test():
     pass
