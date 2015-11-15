@@ -49,7 +49,7 @@ class treatment():
         result = []
         for i in beijing_all_en:
             if i[0] in beijing_attraction and i[2] in beijing_attraction:
-                if float(i[5]) >= 0.5:#阈值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                if float(i[5]) >= 0.6:#阈值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     #print i
                     result.append((i[0],i[2],i[5],i[6],"1"))#(景点1，景点2，maxc,minc，“main”)
         #print result
@@ -110,14 +110,16 @@ class treatment():
                         else:
                             pass
             return result
-        result = plusKind(kind,result)     
+        result = plusKind(kind,result) 
+        print len(result)   
             #break
         #break
         #print str(type(result[0]))
         test_result = []
+        real_result = []
         for i in result:
             if str(type(i)) == "<type 'list'>":
-                pass
+                real_result.append(i)
             else:
                 #print i
                 #pass
@@ -143,7 +145,9 @@ class treatment():
                         pass
         print "____"
         print test_result
-        return result
+        print len(result),len(real_result),len(test_result)
+        real_result.extend(test_result)
+        return real_result
 
     def drawGraph(self, dataset, weight = 0):
         #weight=1表示画有权重的图，weight=0表示画没有权重的图
@@ -278,7 +282,7 @@ def main():
     #data = DataAnalysis().findConnection_en()
     #中文
     data = DataAnalysis().findConnection()
-    '''
+    
     print data
     for i in xrange(len(data)):
         print data[i]
@@ -290,7 +294,9 @@ def main():
     for i in xrange(len(data)):
         data[i] = ",".join(data[i])
     print data
-    '''
+    string = "\n".join(data)
+    open("result.txt","w").write(string)
+    
 def test():
     pass
 
