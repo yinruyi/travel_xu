@@ -51,4 +51,4 @@ def npRank(dataset, k):
 	dataset = dataset[temp]
 	print dataset
 
-npRank(a,0)
+npRank(a,0s)
