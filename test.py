@@ -71,10 +71,12 @@ class treatment():
         kind = self.joinResult([(i[0],i[1]) for i in result])#归类
         temp_attraction = set(beijing_attraction)
         for i in kind:
-            temp_attraction = 
-
-        print kind
-        self.writefile(kind)
+            temp_attraction = temp_attraction - set(i)
+        #print temp_attraction
+        for i in list(temp_attraction):
+            kind.append([i])
+        #print kind
+        #self.writefile(kind)
         #print len(result)#归类数目
         #---------------景点归类完成------------------
         beijing_attraction_other = []
@@ -107,6 +109,7 @@ class treatment():
         for i in connection:
             result.append(i)
         result = self.pluskind(result, kind)
+        self.writefile(result)
         return result
 
     def pluskind(self, result, kind):
@@ -122,7 +125,31 @@ class treatment():
                 if i in kind[j]:
                     temp[i] = j
                     break
-        #print temp
+        print temp
+        #print result
+        for i in xrange(len(result)):
+            result[i] = list(result[i])
+        print result[0]
+        for i in xrange(len(result)):
+            temp_a = result[i][0]
+            temp_b = result[i][1]
+            if result[i][4] == "1":
+                if temp[temp_a] == temp[temp_b]:
+                    result[i].append(str(temp[temp_a]))
+                else:
+                    print "error"
+            else:
+                if temp_a in temp:
+                    result[i].append(str(temp[temp_a]))
+                else:
+                    result[i].append(str(temp[temp_b]))
+        return result
+
+
+
+
+
+
         #print len(temp),len(attraction),len(set(attraction))
 
 
@@ -216,22 +243,9 @@ def main():
     #data = DataAnalysis().findConnection_en()
     #中文
     data = DataAnalysis().findConnection()
-    
-    #print data
-    '''
-    for i in xrange(len(data)):
-        print data[i]
-        print type(data[i])
-        data[i][2] = str(data[i][2])
-        data[i][3] = str(data[i][3])
-        print data[i]
-        #break
-    for i in xrange(len(data)):
-        data[i] = ",".join(data[i])
     print data
-    string = "\n".join(data)
-    open("result.txt","w").write(string)
-    '''
+    
+    
 def test():
     pass
 
