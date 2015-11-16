@@ -25,7 +25,15 @@ class pretreatment():
         return dataset
 
     def writefile(self, dataset):
-        pass
+        #for i in xrange(len(data#)):
+        #    data[i][2] = str(data[i][2])
+        #    data[i][3] = str(data[i][3])
+        #    print data[i]
+        #    #break
+        for i in xrange(len(dataset)):
+            dataset[i] = ",".join(dataset[i])
+        string = "\n".join(dataset)
+        open("result.txt","w").write(string)
 
     def test():
     	pass
@@ -49,13 +57,14 @@ class treatment():
         result = []
         for i in beijing_all_en:
             if i[0] in beijing_attraction and i[2] in beijing_attraction:
-                if float(i[5]) >= 0.6:#阈值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                if float(i[5]) >= 0.5:#阈值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     #print i
                     result.append((i[0],i[2],i[5],i[6],"1"))#(景点1，景点2，maxc,minc，“main”)
         #print result
         #self.drawGraph(result)#画图
         kind = self.joinResult([(i[0],i[1]) for i in result])#归类
         print kind
+        self.writefile(kind)
         #print len(result)#归类数目
         #---------------景点归类完成------------------
         beijing_attraction_other = []
@@ -87,68 +96,24 @@ class treatment():
         #print len(connection)
         for i in connection:
             result.append(i)
-        #print "**********"
-        #print result
-        #print len(result)
-        #print kind
-        def plusKind(kind,result):
-            for i in xrange(len(kind)):
-                for j in xrange(len(result)):
-                    #print result[j][0],kind[i]
-                    #if result[j][0] in kind[i]:
-                    #    print '*'
-                    
-                    if result[j][0] in kind[i]:
-                        temp = list(result[j])
-                        temp.append(str(i))
-                        result[j] = temp
-                    else:
-                        if result[j][1] in kind[i]:
-                            temp = list(result[j])
-                            temp.append(str(i))
-                            result[j] = temp
-                        else:
-                            pass
-            return result
-        result = plusKind(kind,result) 
-        print len(result)   
-            #break
-        #break
-        #print str(type(result[0]))
-        test_result = []
-        real_result = []
-        for i in result:
-            if str(type(i)) == "<type 'list'>":
-                real_result.append(i)
-            else:
-                #print i
-                #pass
-                test_result.append(i)
-        print test_result
-        
-        for i in xrange(len(kind)):
-            for j in xrange(len(test_result)):
-                #print result[j][0],kind[i]
-                #if result[j][0] in kind[i]:
-                #    print '*'
-                
-                if result[j][0] in kind[i]:
-                    temp = list(test_result[j])
-                    temp.append(str(i))
-                    test_result[j] = temp
-                else:
-                    if result[j][1] in kind[i]:
-                        temp = list(test_result[j])
-                        temp.append(str(i))
-                        test_result[j] = temp
-                    else:
-                        pass
-        print "____"
-        print test_result
-        print len(result),len(real_result),len(test_result)
-        real_result.extend(test_result)
-        return real_result
+        result = self.pluskind(result, kind)
+        return result
 
+    def pluskind(self, result, kind):
+        print kind
+        print len(kind)
+        attraction = []
+        for i in kind:
+            attraction.extend(i)
+        print attraction
+        temp = {}
+        for i in attraction:
+            for j in xrange(len(kind)):
+                if i in kind[j]:
+                    temp[i] = j
+                    break
+        print temp
+        print len(temp),len(attraction),len(set(attraction))
 
 
     def rankConnection(self, dataset):
@@ -219,7 +184,8 @@ def main():
     #中文
     data = DataAnalysis().findConnection()
     
-    print data
+    #print data
+    '''
     for i in xrange(len(data)):
         print data[i]
         print type(data[i])
@@ -232,7 +198,7 @@ def main():
     print data
     string = "\n".join(data)
     open("result.txt","w").write(string)
-    
+    '''
 def test():
     pass
 
