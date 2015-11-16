@@ -31,6 +31,12 @@ class pretreatment():
         #    print data[i]
         #    #break
         for i in xrange(len(dataset)):
+            temp = dataset[i]
+            if len(temp) >= 1:
+                for j in xrange(len(temp)):
+                    temp[j] = str(temp[j])
+            dataset[i] = temp
+        for i in xrange(len(dataset)):
             dataset[i] = ",".join(dataset[i])
         string = "\n".join(dataset)
         open("result.txt","w").write(string)
@@ -61,8 +67,12 @@ class treatment():
                     #print i
                     result.append((i[0],i[2],i[5],i[6],"1"))#(景点1，景点2，maxc,minc，“main”)
         #print result
-        #self.drawGraph(result)#画图
+        
         kind = self.joinResult([(i[0],i[1]) for i in result])#归类
+        temp_attraction = set(beijing_attraction)
+        for i in kind:
+            temp_attraction = 
+
         print kind
         self.writefile(kind)
         #print len(result)#归类数目
@@ -100,20 +110,20 @@ class treatment():
         return result
 
     def pluskind(self, result, kind):
-        print kind
-        print len(kind)
+        #print kind
+        #print len(kind)
         attraction = []
         for i in kind:
             attraction.extend(i)
-        print attraction
+        #print attraction
         temp = {}
         for i in attraction:
             for j in xrange(len(kind)):
                 if i in kind[j]:
                     temp[i] = j
                     break
-        print temp
-        print len(temp),len(attraction),len(set(attraction))
+        #print temp
+        #print len(temp),len(attraction),len(set(attraction))
 
 
     def rankConnection(self, dataset):
@@ -154,6 +164,10 @@ class treatment():
 
 
     def joinResult(self, dataset):
+        #为了归类[(1,2),(2,3),(3,4),(5,6)] -> [[1,2,3,4],[5,6]]
+        '''
+        print "*****"
+        print dataset
         #[(1,2),(2,3),(3,4),(5,6)] -> [[1,2,3,4],[5,6]]
         dataset = [list(i) for i in dataset]
         for i in xrange(len(dataset)-1):
@@ -167,6 +181,25 @@ class treatment():
             if dataset[i] != []:
                 new_dataset.append(dataset[i])
         return new_dataset
+        '''
+        dataset = [list(i) for i in dataset]
+        def joinSingle(dataset):
+            for i in xrange(len(dataset)-1):
+                for j in xrange(i+1,len(dataset)):
+                    #print (i,j)
+                    if len(set(dataset[i]) & set(dataset[j])) != 0:
+                        dataset[i] = list((set(dataset[i]) | set(dataset[j])))
+                        dataset[j] = []
+            return dataset
+        dataset = joinSingle(dataset)
+        while [] in dataset:
+            new_dataset = []
+            for i in xrange(len(dataset)):
+                if dataset[i] != []:
+                    new_dataset.append(dataset[i])
+            dataset = joinSingle(new_dataset)
+        return dataset
+
 
 
 
