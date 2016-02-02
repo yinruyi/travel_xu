@@ -38,12 +38,44 @@ class pretreatment():
 
 
 class Methods():
-    def getAttraction(self, dataset):
-    	for i in xrange(len(dataset)):
-    		temp = dataset[i]
+	def getAttraction(self, dataset):
+		attraction = []
+		for i in xrange(len(dataset)):
+			attraction_temp = []
+			temp = dataset[i]
 			temp = temp.split()
-			if len(temp) >= 0:
-				pass    		
+			#print temp
+			if len(temp) > 0:
+				#print "hh"
+				for j in xrange(len(temp)):
+					item = temp[j]
+					item = item.split(u"/")
+					if len(item) == 2 and item[1] == "tttttttt":
+						attraction_temp.append(item[0])
+						#print attraction_temp
+			attraction.extend(attraction_temp)
+		#print "hh"
+		#print attraction
+		print len(list(set(attraction)))
+		attractionCount = self.count(attraction)
+		print attractionCount
+		attractionList = []
+		for k,v in attractionCount.items():
+			temp = [k,v]
+			attractionList.append(temp)
+			#print attractionList
+			#break
+		self.writeMatrix(attractionList,"result.txt")
+
+	def count(self, dataset):
+		resultSet = {}
+		for i in xrange(len(dataset)):
+			if dataset[i] in resultSet:
+				resultSet[dataset[i]] += 1
+			else:
+				resultSet[dataset[i]] = 1
+		return resultSet
+
 
 
 class DataAnalysis(pretreatment, Methods):
@@ -54,3 +86,4 @@ class DataAnalysis(pretreatment, Methods):
 if __name__=='__main__':
     data = DataAnalysis().read_txt(abspath+"//data//data.txt")
     print data[0]
+    DataAnalysis().getAttraction(data)
