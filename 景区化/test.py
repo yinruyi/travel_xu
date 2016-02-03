@@ -53,6 +53,7 @@ class Methods():
 					if len(item) == 2 and item[1] == "tttttttt":
 						attraction_temp.append(item[0])
 						#print attraction_temp
+			attraction_temp = list(set(attraction_temp))
 			attraction.extend(attraction_temp)
 		#print "hh"
 		#print attraction
