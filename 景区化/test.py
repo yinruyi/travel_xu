@@ -36,9 +36,29 @@ class pretreatment():
     	for i in xrange(len(dataset)):
     		pass
 
+class treatment():
+	def count(self, dataset):
+		resultSet = {}
+		for i in xrange(len(dataset)):
+			if dataset[i] in resultSet:
+				resultSet[dataset[i]] += 1
+			else:
+				resultSet[dataset[i]] = 1
+		return resultSet
+
+	def learnLinkList(self, dataset):
+		linkList = []
+		for i in xrange(len(dataset)):
+			temp = dataset[i]
+			if len(temp) == 2:
+
+
+
+
 
 class Methods():
 	def getAttraction(self, dataset):
+		#找寻TOP30-50热门景点
 		attraction = []
 		for i in xrange(len(dataset)):
 			attraction_temp = []
@@ -68,23 +88,47 @@ class Methods():
 			#break
 		self.writeMatrix(attractionList,"result.txt")
 
-	def count(self, dataset):
-		resultSet = {}
+
+
+	def getmainAttractionLink(self, dataset, mainAttraction):
+		#找出大景区
+		candidateLink = []
+		attractionLink = []
+		attraction = []
 		for i in xrange(len(dataset)):
-			if dataset[i] in resultSet:
-				resultSet[dataset[i]] += 1
-			else:
-				resultSet[dataset[i]] = 1
-		return resultSet
+			attraction_temp = []
+			temp = dataset[i]
+			temp = temp.split()
+			#print temp
+			if len(temp) > 0:
+				#print "hh"
+				for j in xrange(len(temp)):
+					item = temp[j]
+					item = item.split(u"/")
+					if len(item) == 2 and item[1] == "tttttttt":
+						attraction_temp.append(item[0])
+						#print attraction_temp
+			attraction_temp = list(set(attraction_temp))
+			attractionLink.append(attraction_temp)
+			attraction.extend(attraction_temp)
+		#print attractionLink[2],len(attractionLink)
+		attractionCount = self.count(attraction)
 
 
+class test():
+	def test():
+		pass
+		
 
-class DataAnalysis(pretreatment, Methods):
+class DataAnalysis(pretreatment, Methods, treatment, test):
 	pass
 
 
 
 if __name__=='__main__':
     data = DataAnalysis().read_txt(abspath+"//data//data.txt")
-    print data[0]
-    DataAnalysis().getAttraction(data)
+    #print data[0]
+    #DataAnalysis().getAttraction(data)
+    mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
+    #print mainAttraction
+    DataAnalysis().getmainAttractionLink(data, mainAttraction)
