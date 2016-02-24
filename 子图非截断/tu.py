@@ -71,12 +71,10 @@ class Methods():
 					num += 1
 			#print num
 			if num >= 10:
-				mc = num/min(attractionSet[temp[0]],attractionSet[temp[1]])
+				mc = num*1.0/min(attractionSet[temp[0]],attractionSet[temp[1]])
 				if mc >= 0.5:
-					Connection[temp] = num
-
-				
-		print Connection,len(Connection)
+					Connection[temp] = [num,mc]	
+		return Connection
 
 
 
@@ -131,7 +129,17 @@ class DataAnalysis(pretreatment, Methods, treatment):
 
 
 
+
 if __name__=='__main__':
-    data = DataAnalysis().read_txt(abspath+"//data//data.txt")
-    mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
-    DataAnalysis().getAttraction(data)
+	data = DataAnalysis().read_txt(abspath+"//data//data.txt")
+	mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
+	connection = DataAnalysis().getAttraction(data)
+	print len(connection)
+	result = []
+	for k,v in connection.items():
+		if k[0] in mainAttraction and k[1] in mainAttraction:
+			temp = [k[0],k[1],v[0],v[1]]
+			result.append(temp)
+	print len(result)
+	DataAnalysis().writeMatrix(result, "test.txt")
+
