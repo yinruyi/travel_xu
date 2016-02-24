@@ -73,11 +73,8 @@ class Methods():
 			if num >= 10:
 				mc = num*1.0/min(attractionSet[temp[0]],attractionSet[temp[1]])
 				if mc >= 0.5:
-					Connection[temp] = [num,mc]	
+					Connection[temp] = [num,mc,attractionSet[temp[0]],attractionSet[temp[1]]]	
 		return Connection
-
-
-
 
 	def calculateMC(self, attraction, attractionSet):
 		attraction = list(set(attraction))
@@ -88,16 +85,9 @@ class Methods():
 					candidateConnection.append((attraction[i],attraction[j]))
 		return candidateConnection
 
-
-
-
-
 	def up_supportAttraction(self, dataset, support = 10):
 		dataset = self.count(dataset)
 		pass
-
-
-
 
 	def clearAttraction(self, dataset):
 		attractionResult = []
@@ -105,6 +95,60 @@ class Methods():
 			if len(dataset[i]) > 1:
 				attractionResult.append(dataset[i])
 		return attractionResult
+
+	def joinResult(self, dataset):
+		#为了归类[(1,2),(2,3),(3,4),(5,6)] -> [[1,2,3,4],[5,6]]
+		dataset = [list(i) for i in dataset]
+		def joinSingle(dataset):
+			for i in xrange(len(dataset)-1):
+				for j in xrange(i+1,len(dataset)):
+					#print (i,j)
+					if len(set(dataset[i]) & set(dataset[j])) != 0:
+						dataset[i] = list((set(dataset[i]) | set(dataset[j])))
+						dataset[j] = []
+			return dataset
+		dataset = joinSingle(dataset)
+		while [] in dataset:
+			new_dataset = []
+			for i in xrange(len(dataset)):
+				if dataset[i] != []:
+					new_dataset.append(dataset[i])
+			dataset = joinSingle(new_dataset)
+		return dataset
+
+	def findSmallAtraction(self, one_kindResult, other_kindResult, connection):
+		#print "aa"
+		candidateConnection = []
+		for k,v in connection.items():
+			if k[0] in other_kindResult and k[1] in other_kindResult:
+				pass
+			else:
+				temp = [k[0],k[1],v[0],v[1],v[2],v[3]]
+				candidateConnection.append(temp)
+		kindConnection = []
+		print candidateConnection[0]
+		tempList = ["a"]
+		while tempList != []:
+			one_kindResult_org = one_kindResult
+			for i in xrange(len(candidateConnection)):
+				temp = candidateConnection[i]
+				if temp[0] in one_kindResult or temp[1] in one_kindResult:
+					one_kindResult.extend([temp[0],temp[1]])
+			one_kindResult = list(set(one_kindResult))
+			tempList = list(set(one_kindResult)-set(one_kindResult_org))
+		print one_kindResult,len(one_kindResult)
+		for i in xrange(len(candidateConnection)):
+			temp = candidateConnection[i]
+			if temp[0] in one_kindResult and temp[1] in one_kindResult:
+				kindConnection.append(temp)
+		return kindConnection
+
+
+
+
+
+
+
 
 
 class treatment():
@@ -117,20 +161,13 @@ class treatment():
 				resultSet[dataset[i]] = 1
 		return resultSet
 
-	
-
-		
-
-		
 
 
 class DataAnalysis(pretreatment, Methods, treatment):
 	pass
 
-
-
-
-if __name__=='__main__':
+def mcpart():
+	#通过mc=0.5找到TOP39之间的连接关系
 	data = DataAnalysis().read_txt(abspath+"//data//data.txt")
 	mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
 	connection = DataAnalysis().getAttraction(data)
@@ -142,4 +179,32 @@ if __name__=='__main__':
 			result.append(temp)
 	print len(result)
 	DataAnalysis().writeMatrix(result, "test.txt")
+
+def findkind():
+	#将top39景点归类然后寻找每类下小景点
+	data = DataAnalysis().read_txt(abspath+"//data//data.txt")
+	mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
+	connection = DataAnalysis().getAttraction(data)#满足阈值的所有景点的两两关系
+	print len(connection)
+	result = []
+	for k,v in connection.items():
+		if k[0] in mainAttraction and k[1] in mainAttraction:
+			result.append(k)
+	print result#TOP39景点两两关系
+	kindResult = DataAnalysis().joinResult(result)
+	kindResult.append([u"八达岭"])#已经对TOP39景点分好类
+	print kindResult,len(kindResult)
+	one_kindResult = kindResult[0]
+	other_kindResult = list(set(mainAttraction)-set(one_kindResult))
+	print other_kindResult
+	kindconnection = DataAnalysis().findSmallAtraction(one_kindResult,other_kindResult,connection)
+	print kindconnection
+	DataAnalysis().writeMatrix(kindconnection, "one_kind.txt")
+
+
+
+if __name__=='__main__':
+	#mcpart()
+	findkind()
+	
 
