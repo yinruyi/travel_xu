@@ -126,7 +126,7 @@ class Methods():
 				temp = [k[0],k[1],v[0],v[1],v[2],v[3]]
 				candidateConnection.append(temp)
 		kindConnection = []
-		print candidateConnection[0]
+		#print candidateConnection[0]
 		tempList = ["a"]
 		while tempList != []:
 			one_kindResult_org = one_kindResult
@@ -136,7 +136,7 @@ class Methods():
 					one_kindResult.extend([temp[0],temp[1]])
 			one_kindResult = list(set(one_kindResult))
 			tempList = list(set(one_kindResult)-set(one_kindResult_org))
-		print one_kindResult,len(one_kindResult)
+		#print one_kindResult,len(one_kindResult)
 		for i in xrange(len(candidateConnection)):
 			temp = candidateConnection[i]
 			if temp[0] in one_kindResult and temp[1] in one_kindResult:
@@ -185,21 +185,21 @@ def findkind():
 	data = DataAnalysis().read_txt(abspath+"//data//data.txt")
 	mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
 	connection = DataAnalysis().getAttraction(data)#满足阈值的所有景点的两两关系
-	print len(connection)
+	#print len(connection)
 	result = []
 	for k,v in connection.items():
 		if k[0] in mainAttraction and k[1] in mainAttraction:
 			result.append(k)
-	print result#TOP39景点两两关系
+	#print result#TOP39景点两两关系
 	kindResult = DataAnalysis().joinResult(result)
 	kindResult.append([u"八达岭"])#已经对TOP39景点分好类
-	print kindResult,len(kindResult)
+	#print kindResult,len(kindResult)
 	one_kindResult = kindResult[0]
 	other_kindResult = list(set(mainAttraction)-set(one_kindResult))
 	print other_kindResult
 	kindconnection = DataAnalysis().findSmallAtraction(one_kindResult,other_kindResult,connection)
 	print kindconnection
-	DataAnalysis().writeMatrix(kindconnection, "one_kind.txt")
+	DataAnalysis().writeMatrix(kindconnection, "0_kind.txt")
 
 
 
