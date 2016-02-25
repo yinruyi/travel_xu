@@ -123,8 +123,9 @@ class Methods():
 			if k[0] in other_kindResult and k[1] in other_kindResult:
 				pass
 			else:
-				temp = [k[0],k[1],v[0],v[1],v[2],v[3]]
-				candidateConnection.append(temp)
+				if v[1] >= 0.8:
+					temp = [k[0],k[1],v[0],v[1],v[2],v[3]]
+					candidateConnection.append(temp)
 		kindConnection = []
 		#print candidateConnection[0]
 		tempList = ["a"]
@@ -194,12 +195,12 @@ def findkind():
 	kindResult = DataAnalysis().joinResult(result)
 	kindResult.append([u"八达岭"])#已经对TOP39景点分好类
 	#print kindResult,len(kindResult)
-	one_kindResult = kindResult[4]
+	one_kindResult = kindResult[0]
 	other_kindResult = list(set(mainAttraction)-set(one_kindResult))
 	print other_kindResult
 	kindconnection = DataAnalysis().findSmallAtraction(one_kindResult,other_kindResult,connection)
 	print kindconnection
-	DataAnalysis().writeMatrix(kindconnection, "4_kind.txt")
+	DataAnalysis().writeMatrix(kindconnection, "0_kind.txt")
 
 
 
