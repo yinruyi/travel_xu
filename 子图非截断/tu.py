@@ -194,12 +194,12 @@ def findkind():
 	kindResult = DataAnalysis().joinResult(result)
 	kindResult.append([u"八达岭"])#已经对TOP39景点分好类
 	#print kindResult,len(kindResult)
-	one_kindResult = kindResult[0]
+	one_kindResult = kindResult[4]
 	other_kindResult = list(set(mainAttraction)-set(one_kindResult))
 	print other_kindResult
 	kindconnection = DataAnalysis().findSmallAtraction(one_kindResult,other_kindResult,connection)
 	print kindconnection
-	DataAnalysis().writeMatrix(kindconnection, "0_kind.txt")
+	DataAnalysis().writeMatrix(kindconnection, "4_kind.txt")
 
 
 
