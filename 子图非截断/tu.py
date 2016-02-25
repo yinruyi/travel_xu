@@ -168,7 +168,7 @@ class DataAnalysis(pretreatment, Methods, treatment):
 	pass
 
 def mcpart():
-	#通过mc=0.5找到TOP39之间的连接关系
+	#通过mc=0.5找到TOP37之间的连接关系
 	data = DataAnalysis().read_txt(abspath+"//data//data.txt")
 	mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
 	connection = DataAnalysis().getAttraction(data)
@@ -194,6 +194,7 @@ def findkind():
 	#print result#TOP39景点两两关系
 	kindResult = DataAnalysis().joinResult(result)
 	kindResult.append([u"八达岭"])#已经对TOP39景点分好类
+	#DataAnalysis().writeMatrix(kindResult, "kind.txt")
 	#print kindResult,len(kindResult)
 	one_kindResult = kindResult[0]
 	other_kindResult = list(set(mainAttraction)-set(one_kindResult))

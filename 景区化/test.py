@@ -51,8 +51,7 @@ class treatment():
 		for i in xrange(len(dataset)):
 			temp = dataset[i]
 			if len(temp) == 2:
-
-
+				pass
 
 
 
@@ -115,12 +114,9 @@ class Methods():
 		attractionCount = self.count(attraction)
 
 
-class test():
-	def test():
-		pass
 		
 
-class DataAnalysis(pretreatment, Methods, treatment, test):
+class DataAnalysis(pretreatment, Methods, treatment):
 	pass
 
 
@@ -128,7 +124,7 @@ class DataAnalysis(pretreatment, Methods, treatment, test):
 if __name__=='__main__':
     data = DataAnalysis().read_txt(abspath+"//data//data.txt")
     #print data[0]
-    #DataAnalysis().getAttraction(data)
-    mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
+    DataAnalysis().getAttraction(data)
+    #mainAttraction = DataAnalysis().read_txt(abspath+"//data//mainAttraction.txt")
     #print mainAttraction
-    DataAnalysis().getmainAttractionLink(data, mainAttraction)
+    #DataAnalysis().getmainAttractionLink(data, mainAttraction)
