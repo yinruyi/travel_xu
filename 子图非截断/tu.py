@@ -175,9 +175,9 @@ def mcpart():
 	print len(connection)
 	result = []
 	for k,v in connection.items():
-		if k[0] in mainAttraction and k[1] in mainAttraction:
-			temp = [k[0],k[1],v[0],v[1]]
-			result.append(temp)
+		#if k[0] in mainAttraction and k[1] in mainAttraction:
+		temp = [k[0],k[1],v[0],v[1]]
+		result.append(temp)
 	print len(result)
 	DataAnalysis().writeMatrix(result, "test.txt")
 
@@ -206,7 +206,7 @@ def findkind():
 
 
 if __name__=='__main__':
-	#mcpart()
-	findkind()
+	mcpart()
+	#findkind()
 	
 
