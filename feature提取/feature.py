@@ -67,7 +67,7 @@ class Methods():
         for k,v in featureSet.items():
             temp = []
             mc = v*1.0/min(len(featureData),attractionSet[k])
-            if mc >= 0.8:
+            if mc >= 0.8 and v >= 5 and attractionSet[k] <= len(featureData):
                 temp = [k,v,mc,len(featureData),attractionSet[k]]
                 resultList.append(temp)
         return resultList
