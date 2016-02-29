@@ -103,13 +103,13 @@ class DataAnalysis(pretreatment, Methods):
 
 
 if __name__=='__main__':
-    dataset = DataAnalysis().read_txt(abspath+'//998data.txt')
+    dataset = DataAnalysis().read_txt(abspath+'//tongjiblog998.txt')
     #print dataset_original[0]
     dataset = DataAnalysis().makeMatrix(dataset)
     #print dataset[0]
     scence = DataAnalysis().getScence(dataset)
     #print scence,len(scence)
-    hitsMatrix = DataAnalysis().getHITSMatrix(DataAnalysis().read_txt(abspath+'//998data.txt'), scence)
+    hitsMatrix = DataAnalysis().getHITSMatrix(DataAnalysis().read_txt(abspath+'//tongjiblog998.txt'), scence)
     #print hitsMatrix[0]
     scence_point = DataAnalysis().hits(hitsMatrix, dataset, scence)
     resultList = [[scence[i],scence_point[i]] for i in xrange(len(scence))]

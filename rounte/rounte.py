@@ -34,14 +34,32 @@ class pretreatment():
         f.close()
 
 
-class Methods():
+class Rounte():#景区之间走动的次数
     def trans_data(self, kind, data):
+        result = []
         kind = self.transKind(kind)
-        print kind
+        #print kind
         #if kind.has_key(u"水立方"):
         #    print "ss"
         #else:
         #    print "ssss"
+        for i in xrange(len(data)):
+            #print data[i]
+            temp_result = []
+            temp = data[i].split()
+            #print temp
+            if len(temp) > 0:
+                for j in xrange(len(temp)):
+                    new_temp = temp[j].split("/")
+                    if len(new_temp) == 2:
+                        #print new_temp
+                        if  new_temp[1] == "tttttttt" and kind.has_key(new_temp[0]):
+                            temp_result.append(kind[new_temp[0]])
+            #print temp_result
+            result.append(temp_result)
+
+            #break
+        return result
 
     def transKind(self, kind):
         #print len(kind)
@@ -53,18 +71,77 @@ class Methods():
                 result[temp[j]] = direction[i]
         return result
 
+    def count(self, dataset):
+        resultSet = {}
+        for i in xrange(len(dataset)):
+            if dataset[i] in resultSet:
+                resultSet[dataset[i]] += 1
+            else:
+                resultSet[dataset[i]] = 1
+        return resultSet
 
-    def getRounte(self, kind, data):
-        data = self.trans_data(kind, data)
+    def getRounte(self):
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        data = self.read_txt(abspath+"//data//tongjiblog998.txt")
+        data = self.trans_data(kind, data)#得到景区间走动的list
+        rounteList = []
+        for i in xrange(len(data)):
+            #print data[i]
+            temp = data[i]
+            if len(temp) > 1:
+                for j in xrange(len(temp)-1):
+                    if temp[j] != temp[j+1]:
+                        #rounteTemp = "/".join([temp[j],temp[j+1]])
+                        rounteTemp = (temp[j],temp[j+1])
+                        rounteList.append(rounteTemp)
+        #print rounteList,len(rounteList)
+        rounteSet = self.count(rounteList)#景区间走动的次数
+        print rounteSet,len(rounteSet)
+        return rounteSet
 
-class DataAnalysis(pretreatment, Methods):
+class hits():#景区hits得分
+    def getDriectionHits(self):
+        hitsResult = {}
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        hits_data = self.read_txt(abspath+"//data//hits.txt")
+        kind = self.transKind(kind)
+        hitsSet = self.transData(hits_data)
+        #print kind
+        #print hitsSet,kind
+        direction = "ABCDEF"
+        for k,v in kind.items():
+            if v in hitsResult:
+                hitsResult[v] += float(hitsSet[k])
+            else:
+                hitsResult[v] = float(hitsSet[k])
+        print hitsResult
+        hitsResult = self.transHitsResult(hitsResult)
+        print hitsResult
+        return hitsResult
+            
+    def transData(self, dataset):
+        Set = {}
+        for i in xrange(len(dataset)):
+            temp = dataset[i]
+            temp = temp.split(u",")
+            Set[temp[0]] = temp[1]
+        return Set
+
+    def transHitsResult(self, dataset):
+        temp = []
+        for k,v in dataset.items():
+            temp.append(v)
+        max_num = max(temp)
+        for k,v in dataset.items():
+            dataset[k] = v/max_num
+        return dataset
+
+
+
+class DataAnalysis(pretreatment, Rounte, hits):
     pass
 
 
 
 if __name__=='__main__':
-    #print "test"
-    kind = DataAnalysis().read_txt(abspath+"//data//kind.txt")
-    data = DataAnalysis().read_txt(abspath+"//data//tongjiblog998.txt")
-    #print data
-    DataAnalysis().getRounte(kind, data)
+    DataAnalysis().getDriectionHits()
