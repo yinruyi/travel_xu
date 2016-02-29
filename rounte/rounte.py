@@ -108,7 +108,7 @@ class hits():#景区hits得分
         hitsSet = self.transData(hits_data)
         #print kind
         #print hitsSet,kind
-        direction = "ABCDEF"
+        #direction = "ABCDEF"
         for k,v in kind.items():
             if v in hitsResult:
                 hitsResult[v] += float(hitsSet[k])
@@ -136,12 +136,61 @@ class hits():#景区hits得分
             dataset[k] = v/max_num
         return dataset
 
+class sentiment():
+    def getSentiment(self):
+        sentimentResult = {}
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        sentiment_data = self.read_txt(abspath+"//data//sentiment.txt")
+        kind = self.transKind(kind)
+        sentimentSet = self.transData(sentiment_data)
+        #print kind
+        #print hitsSet,kind
+        #direction = "ABCDEF"
+        for k,v in kind.items():
+            if v in sentimentResult:
+                sentimentResult[v] += float(sentimentSet[k])/5
+            else:
+                sentimentResult[v] = float(sentimentSet[k])/5
+        print sentimentResult
+        sentimentResult = self.transHitsResult(sentimentResult)
+        print sentimentResult
+        return sentimentResult
+
+class feature():
+    def getFeature(self):
+        attraction_featureSet = {}
+        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        #print mainAttraction
+        for i in xrange(len(mainAttraction)):
+            path = abspath+"//data//result_data//"+str(i)+".txt"
+            txt = self.read_txt(path)
+            txtFeature = self.txt2feature(txt)
+            #print txtFeature
+            if (txtFeature[0] == "" or txtFeature[0] == " ") and len(txtFeature) == 1:
+            #if len(txtFeature) == 1:
+                attraction_featureSet[mainAttraction[i]] = []
+            else:
+                attraction_featureSet[mainAttraction[i]] = txtFeature
+        print attraction_featureSet
+        #得到了每个景点锁对应的特征
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        kind = self.transKind(kind)
+        for k,v in kind.items():
+            pass
 
 
-class DataAnalysis(pretreatment, Rounte, hits):
+    def txt2feature(self, dataset):
+        feature = []
+        for i in xrange(len(dataset)):
+            temp = dataset[i].split(",")
+            feature.append(temp[0])
+        return feature
+
+
+class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
     pass
 
 
 
 if __name__=='__main__':
-    DataAnalysis().getDriectionHits()
+    DataAnalysis().getFeature()
