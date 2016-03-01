@@ -96,7 +96,7 @@ class Rounte():#景区之间走动的次数
                         rounteList.append(rounteTemp)
         #print rounteList,len(rounteList)
         rounteSet = self.count(rounteList)#景区间走动的次数
-        print rounteSet,len(rounteSet)
+        #print rounteSet,len(rounteSet)
         return rounteSet
 
 class hits():#景区hits得分
@@ -205,8 +205,44 @@ class feature():
 
 
 class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
+    def makePlus(self, rounteSet,  section, method = "AX"):
+        #计算AX之和或者XB之和
+        result = []
+        if method == "AX":
+            for k,v in rounteSet.items():
+                if k[0] == section:
+                    result.append(v)
+        elif method == "XB":
+            for k,v in rounteSet.items():
+                if k[1] == section:
+                    result.append(v)
+        #print result
+        result = sum(result)
+        return result
+
+
     def main(self):
-        print "aa"
+        rounteResult = {}
+        rounteSet = self.getRounte()
+        #print rounteSet
+        rounteSet01 = self.set0_1Result(rounteSet)#归一化的路径
+        rounteSet = self.getRounte()#路径次数
+        #print rounteSet,rounteSet01
+        hitsSet = self.getDriectionHits()#hits分数
+        #print hitsSet
+        sentimentSet = self.getSentiment()#sentiment分数
+        #print sentimentSet
+        featureSet = self.getFeature()
+        #print featureSet
+        for k,v in rounteSet.items():
+            AXplus = self.makePlus(rounteSet,k[0],"AX")
+            #print AXplus
+            XBplus = self.makePlus(rounteSet,k[1],"XB")
+            A_part = v*hitsSet[k[0]]*sentimentSet[k[0]]*featureSet[k[0]]/AXplus
+            B_part = v*hitsSet[k[1]]*sentimentSet[k[0]]*featureSet[k[0]]/XBplus
+            point = rounteSet01[k]*(A_part+B_part)
+            rounteResult[k] = point
+        print rounteResult
 
 
 
