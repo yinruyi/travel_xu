@@ -58,9 +58,9 @@ class Rounte():
                 resultSet[dataset[i]] = 1
         return resultSet
 
-    def getRounte(self):
+    def getRounte(self,mainAttraction):
         data = self.read_txt(abspath+"//data//tongjiblog998.txt")
-        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        #mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         data = self.tran_data(mainAttraction, data)
         rounteList = []
         for i in xrange(len(data)):
@@ -74,10 +74,10 @@ class Rounte():
         return rounteSet
 
 class hits():
-    def getHits(self):
+    def getHits(self,mainAttraction):
         resultSet = {}
         hits_data = self.read_txt(abspath+"//data//hits.txt")
-        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        #mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         hitsSet = self.transData(hits_data)
         for k,v in hitsSet.items():
             if k in mainAttraction:
@@ -105,9 +105,9 @@ class hits():
         return dataset
 
 class sentiment():
-    def getSentiment(self):
+    def getSentiment(self,mainAttraction):
         sentimentResult = {}
-        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        #mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         sentiment_data = self.read_txt(abspath+"//data//sentiment.txt")
         sentimentSet = self.transData(sentiment_data)
         for k,v in sentimentSet.items():
@@ -117,9 +117,9 @@ class sentiment():
         return sentimentResult
 
 class feature():
-    def getFeature(self):
+    def getFeature(self,mainAttraction):
         attraction_featureSet = {}
-        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        #mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         for i in xrange(len(mainAttraction)):
             path = abspath+"//data//result_data//"+str(i)+".txt"
             txt = self.read_txt(path)
@@ -163,25 +163,36 @@ class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
         result = sum(result)
         return result
 
+    def transKind(self, kind):
+    	new_kind = []
+    	for i in xrange(len(kind)):
+    		temp = kind[i].split(",")
+    		new_kind.append(temp)
+    	return new_kind
+
+
     def main(self):
         rounteResult = {}
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        kind = self.transKind(kind)
+        mainAttraction = kind[4]##################修改第几景区
         print "test"
-        rounteSet = self.getRounte()
+        rounteSet = self.getRounte(mainAttraction)
         #print rounteSet,len(rounteSet)
         rounteSet01 = self.set0_1Result(rounteSet)
-        rounteSet = self.getRounte()#路径次数
-        hitsSet = self.getHits()#hits分数
+        rounteSet = self.getRounte(mainAttraction)#路径次数
+        hitsSet = self.getHits(mainAttraction)#hits分数
         #print hitsSet
-        sentimentSet = self.getSentiment()#sentiment分数
+        sentimentSet = self.getSentiment(mainAttraction)#sentiment分数
         #print sentimentSet
-        featureSet = self.getFeature()
+        featureSet = self.getFeature(mainAttraction)
         print featureSet
         for k,v in rounteSet.items():
             AXplus = self.makePlus(rounteSet,k[0],"AX")
             #print AXplus
             XBplus = self.makePlus(rounteSet,k[1],"XB")
             A_part = v*hitsSet[k[0]]*sentimentSet[k[0]]*featureSet[k[0]]/AXplus
-            B_part = v*hitsSet[k[1]]*sentimentSet[k[0]]*featureSet[k[0]]/XBplus
+            B_part = v*hitsSet[k[1]]*sentimentSet[k[1]]*featureSet[k[1]]/XBplus
             point = rounteSet01[k]*(A_part+B_part)
             rounteResult[k] = point
         print rounteResult#得到结果

@@ -239,7 +239,7 @@ class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
             #print AXplus
             XBplus = self.makePlus(rounteSet,k[1],"XB")
             A_part = v*hitsSet[k[0]]*sentimentSet[k[0]]*featureSet[k[0]]/AXplus
-            B_part = v*hitsSet[k[1]]*sentimentSet[k[0]]*featureSet[k[0]]/XBplus
+            B_part = v*hitsSet[k[1]]*sentimentSet[k[1]]*featureSet[k[1]]/XBplus
             point = rounteSet01[k]*(A_part+B_part)
             rounteResult[k] = point
         print rounteResult#得到结果
