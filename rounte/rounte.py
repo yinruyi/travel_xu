@@ -114,9 +114,9 @@ class hits():#景区hits得分
                 hitsResult[v] += float(hitsSet[k])
             else:
                 hitsResult[v] = float(hitsSet[k])
-        print hitsResult
-        hitsResult = self.transHitsResult(hitsResult)
-        print hitsResult
+        #print hitsResult
+        hitsResult = self.set0_1Result(hitsResult)
+        #print hitsResult
         return hitsResult
             
     def transData(self, dataset):
@@ -127,13 +127,13 @@ class hits():#景区hits得分
             Set[temp[0]] = temp[1]
         return Set
 
-    def transHitsResult(self, dataset):
+    def set0_1Result(self, dataset):
         temp = []
         for k,v in dataset.items():
             temp.append(v)
         max_num = max(temp)
         for k,v in dataset.items():
-            dataset[k] = v/max_num
+            dataset[k] = v*1.0/max_num
         return dataset
 
 class sentiment():
@@ -151,13 +151,14 @@ class sentiment():
                 sentimentResult[v] += float(sentimentSet[k])/5
             else:
                 sentimentResult[v] = float(sentimentSet[k])/5
-        print sentimentResult
-        sentimentResult = self.transHitsResult(sentimentResult)
-        print sentimentResult
+        #print sentimentResult
+        sentimentResult = self.set0_1Result(sentimentResult)
+        #print sentimentResult
         return sentimentResult
 
 class feature():
     def getFeature(self):
+        featureSet = {}
         attraction_featureSet = {}
         mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         #print mainAttraction
@@ -171,12 +172,28 @@ class feature():
                 attraction_featureSet[mainAttraction[i]] = []
             else:
                 attraction_featureSet[mainAttraction[i]] = txtFeature
-        print attraction_featureSet
+        #print attraction_featureSet
         #得到了每个景点锁对应的特征
         kind = self.read_txt(abspath+"//data//kind.txt")
         kind = self.transKind(kind)
         for k,v in kind.items():
-            pass
+            if v in featureSet:
+                featureSet[v].extend(attraction_featureSet[k])
+            else:
+                featureSet[v] = attraction_featureSet[k]
+        #print featureSet
+        featureSet = self.fixFeatureSetResult(featureSet)
+        #print featureSet
+        featureSet = self.set0_1Result(featureSet)
+        #print featureSet
+        return featureSet
+
+    def fixFeatureSetResult(self, dataset):
+        result = {}
+        for k,v in dataset.items():
+            result[k] = len(list(set(v)))
+        return result
+            
 
 
     def txt2feature(self, dataset):
@@ -188,9 +205,10 @@ class feature():
 
 
 class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
-    pass
+    def main(self):
+        print "aa"
 
 
 
 if __name__=='__main__':
-    DataAnalysis().getFeature()
+    DataAnalysis().main()
