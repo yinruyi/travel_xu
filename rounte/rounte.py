@@ -242,7 +242,13 @@ class DataAnalysis(pretreatment, Rounte, hits, sentiment, feature):
             B_part = v*hitsSet[k[1]]*sentimentSet[k[0]]*featureSet[k[0]]/XBplus
             point = rounteSet01[k]*(A_part+B_part)
             rounteResult[k] = point
-        print rounteResult
+        print rounteResult#得到结果
+        writeResutlt = []
+        for k,v in rounteResult.items():
+            temp = [k[0],k[1],v]
+            writeResutlt.append(temp)
+        self.writeMatrix(writeResutlt,"result.txt")
+
 
 
 
