@@ -33,10 +33,134 @@ class pretreatment():
         line = f.write(string+"\n")
         f.close()
 
+class methods():
+    def trans_data(self, dataset, mainAttraction):
+        #将数据集转变成一个景点二维表
+        result = []
+        for i in xrange(len(dataset)):
+            result_temp = []
+            temp = dataset[i].split()
+            if len(temp) > 0:
+                for j in xrange(len(temp)):
+                    new_temp = temp[j].split("/")
+                    if new_temp[0] in mainAttraction and new_temp[1] == "tttttttt":
+                        result_temp.append(new_temp[0])
+            result.append(result_temp)
+        return result
+    
+    def moveAA(self, dataset):
+        #消除list中相连两个相同的情况
+        result = []
+        for i in xrange(len(dataset)):
+            result_temp = []
+            temp = dataset[i]
+            if len(temp) == 0:
+                pass
+            elif len(temp) == 1:
+                result_temp = temp
+            else:
+                for j in xrange(len(temp)-1):
+                    pass
 
-class DataAnalysis(pretreatment):
+
+    def attractionFP(self, dataset):
+        #对景点挖掘频繁集
+        resultSet = {}
+        resultList = []
+        for i in xrange(len(dataset)):
+            temp = dataset[i]
+            if len(resultList) == 0:
+                resultSet[tuple(temp)] = 1
+            else:
+                flag = 0
+                for j in xrange(len(resultList)):
+                    if set(resultList[j]) == set(temp):
+                        temp = resultList[j]
+                        flag = 1
+                if flag == 0 :
+                    resultList.append(temp)
+                    resultSet[tuple(temp)] = 1
+                else:
+                    resultSet[tuple(temp)] += 1
+        return resultSet,len(resultSet)
+
+    def recommandation(self, attractionList):
+        kind = self.read_txt(abspath+"//data//kind.txt")
+        #print kind
+        kind = self.transData(kind)
+        #print kind
+        attractionSet = self.transAtrantionList(attractionList,kind)
+        print attractionList
+        print attractionSet
+        
+
+    def section_rec(self, attractionList, pointTable):
+        #给定景区或者某个景区内景点进行路线推荐
+        if len(attractionList) == 1:
+            return attractionList
+        else:
+            #a = ["a","b","d","c"]
+            #print self.Permutations(a)
+            rounte = self.Permutations(attractionList)
+            
+
+
+    def transData(self,data):
+        result = []
+        for i in xrange(len(data)):
+            temp = data[i].split(u",")
+            result.append(temp)
+        return result
+
+    def transAtrantionList(self,attractionList,kind):
+        flag = "ABCDEF"
+        attractionSet = {}
+        for i in xrange(len(attractionList)):
+            attraction  = attractionList[i]
+            for j in xrange(len(kind)):
+                if attraction in kind[j]:
+                    section = flag[j]
+            if section in attractionSet:
+                temp = attractionSet[section]
+                temp.append(attraction)
+                attractionSet[section] = temp
+            else:
+                attractionSet[section] = [attraction]
+        return attractionSet
+
+    def Permutations(self,List):
+        #实现List的全排列
+        #thank to http://www.jb51.net/article/62374.htm
+        if len(List) == 1:
+            return [List]
+        else:
+            result = []
+            for i in xrange(0,len(List[:])):
+                bak = List[:]
+                head = bak.pop(i)
+                for j in self.Permutations(bak):
+                    j.insert(0,head)
+                    result.append(j)
+            return result
+
+
+
+class DataAnalysis(pretreatment, methods):
+    def FP(self):
+        #print "aa2b56a8e795af2d85b648296d9d0b8d105e0ab603"
+        mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
+        data = self.read_txt(abspath+"//data//tongjiblog998.txt")
+        #print mainAttraction
+        data = self.trans_data(data, mainAttraction)
+        #print len(data),data[0]
+        attractionFP = self.attractionFP(data)
+        #print attractionFP
     def main(self):
-        print "aa"
+        attractionList = [u"天安门",u"天坛",u"毛主席纪念堂",u"八达岭",u"故宫",u"北京大学",u"清华大学"]
+        self.recommandation(attractionList)
+
+        
+
 
 if __name__ == '__main__':
     DataAnalysis().main()
