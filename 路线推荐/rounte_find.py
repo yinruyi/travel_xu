@@ -90,19 +90,76 @@ class methods():
         kind = self.transData(kind)
         #print kind
         attractionSet = self.transAtrantionList(attractionList,kind)
-        print attractionList
-        print attractionSet
-        
+        #print attractionList
+        #print attractionSet
+        totalPointTable = self.read_table(abspath+"//data//section.txt")#ABCDEF大景区路线的得分
+        #print totalPointTable
+        district = []#目标景区
+        for k,v in attractionSet.items():
+            district.append(k)
+        rounteResult = []#最后路线推荐
+        if len(district) == 1:
+            temp = attractionSet[district[0]]
+            smallPointTable = self.read_table(abspath+"//data//"+str(district[0])+".txt")
+            rounteResult = self.section_rec(temp, smallPointTable)
+        else:
+            #print "aa"
+            #print district
+            big_rounte = self.section_rec(district,totalPointTable)#景区路径推荐
+            for i in xrange(len(big_rounte)):
+                temp = attractionSet[big_rounte[i]]
+                if len(temp) == 1:
+                    rounteResult.append(temp[0])
+                else:
+                    smallPointTable = self.read_table(abspath+"//data//"+str(big_rounte[i])+".txt")
+                    #print smallPointTable
+                    small_rounte = self.section_rec(temp, smallPointTable)
+                    #print small_rounte
+                    rounteResult.extend(small_rounte)
+        return rounteResult
+
+            
+
+
+    def read_table(self,path):
+        resultSet = {}
+        data = self.read_txt(path)
+        for i in xrange(len(data)):
+            temp = data[i].split(u",")
+            resultSet[(temp[0],temp[1])] = float(temp[2])
+        return resultSet
 
     def section_rec(self, attractionList, pointTable):
         #给定景区或者某个景区内景点进行路线推荐
+        rountePointSet = {}
+        point_list = []
         if len(attractionList) == 1:
             return attractionList
         else:
             #a = ["a","b","d","c"]
             #print self.Permutations(a)
             rounte = self.Permutations(attractionList)
-            
+            for i in xrange(len(rounte)):
+                one_rounte = rounte[i]
+                point = self.rountePoint(one_rounte,pointTable)
+                point_list.append(point)
+                rountePointSet[tuple(one_rounte)] = point
+            point_max = max(point_list)
+            for k,v in rountePointSet.items():
+                if v == point_max:
+                    return list(k)
+
+
+    def rountePoint(self, rounte, pointTable):
+        #对每条路线进行打分
+        point = 0
+        for i in xrange(len(rounte)-1):
+            temp = (rounte[i],rounte[i+1])
+            if pointTable.has_key(temp):
+                point += pointTable[temp]
+            else:
+                point = point - 10000#惩罚
+        return point
 
 
     def transData(self,data):
@@ -147,7 +204,6 @@ class methods():
 
 class DataAnalysis(pretreatment, methods):
     def FP(self):
-        #print "aa2b56a8e795af2d85b648296d9d0b8d105e0ab603"
         mainAttraction = self.read_txt(abspath+"//data//mainAttraction.txt")
         data = self.read_txt(abspath+"//data//tongjiblog998.txt")
         #print mainAttraction
@@ -157,7 +213,9 @@ class DataAnalysis(pretreatment, methods):
         #print attractionFP
     def main(self):
         attractionList = [u"天安门",u"天坛",u"毛主席纪念堂",u"八达岭",u"故宫",u"北京大学",u"清华大学"]
-        self.recommandation(attractionList)
+        recommand_rounte = self.recommandation(attractionList)
+        print recommand_rounte
+        self.writeMatrix([recommand_rounte],"result.txt")
 
         
 
