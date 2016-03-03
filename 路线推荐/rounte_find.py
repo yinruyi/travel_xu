@@ -91,6 +91,7 @@ class methods():
             temp = dataset[i]
             if len(resultList) == 0:
                 resultSet[tuple(temp)] = 1
+                resultList.append(temp)
             else:
                 flag = 0
                 for j in xrange(len(resultList)):
@@ -251,9 +252,10 @@ class DataAnalysis(pretreatment, methods):
         self.main(list(set(data[8])))
 
     def main(self,attractionList=[]):
-        #attractionList = [u"天安门",u"天坛",u"毛主席纪念堂",u"八达岭",u"故宫",u"北京大学",u"清华大学"]
         #attractionList = [u"北京大学",u"清华大学",u"颐和园",u"圆明园"]
-        attractionList = [u"后海",u"西海",u"烟袋斜街",u"南锣鼓巷",u"前海",u"鸦儿胡同",u"恭王府",u"什刹海"]
+        #attractionList = [u"后海",u"西海",u"烟袋斜街",u"南锣鼓巷",u"前海",u"鸦儿胡同",u"恭王府",u"什刹海"]
+        #attractionList = [u"皇穹宇",u"文津街",u"北海公园",u"长安街",u"王府井大街",u"人民英雄纪念碑",u"大栅栏",u"毛主席纪念堂",u"王府井",u"天坛",u"正阳门",u"故宫",u"景山公园",u"天安门广场",u"祈年殿",u"箭楼",u"人民大会堂",u"天安门"]
+        attractionList = [u"水立方",u"皇穹宇",u"北京大学",u"后海",u"安定门",u"八达岭"]
         recommand_rounte,district_route = self.recommandation(attractionList)
         print recommand_rounte
         self.writeMatrix([recommand_rounte,district_route],"result.txt")
