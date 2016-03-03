@@ -61,6 +61,26 @@ class methods():
             else:
                 for j in xrange(len(temp)-1):
                     pass
+    def fixAttractionFP(self, dataset):
+        result = []
+        for i in xrange(len(dataset)):
+            resultTemp = []
+            temp = dataset[i]
+            if len(temp) == 0:
+                pass
+            elif len(temp) == 1:
+                resultTemp = temp
+            else:
+                resultTemp.append(temp[0])
+                for j in xrange(1,len(temp)):
+                    if temp[j] == temp[j-1]:
+                        pass
+                    else:
+                        resultTemp.append(temp[j])
+            result.append(resultTemp)
+        return result
+
+
 
 
     def attractionFP(self, dataset):
@@ -82,7 +102,7 @@ class methods():
                     resultSet[tuple(temp)] = 1
                 else:
                     resultSet[tuple(temp)] += 1
-        return resultSet,len(resultSet)
+        return resultSet
 
     def recommandation(self, attractionList):
         kind = self.read_txt(abspath+"//data//kind.txt")
@@ -98,6 +118,7 @@ class methods():
         for k,v in attractionSet.items():
             district.append(k)
         rounteResult = []#最后路线推荐
+        district_route = district#最后景区行走推荐
         if len(district) == 1:
             temp = attractionSet[district[0]]
             smallPointTable = self.read_table(abspath+"//data//"+str(district[0])+".txt")
@@ -116,7 +137,7 @@ class methods():
                     small_rounte = self.section_rec(temp, smallPointTable)
                     #print small_rounte
                     rounteResult.extend(small_rounte)
-        return rounteResult
+        return rounteResult,district_route
 
             
 
@@ -208,17 +229,38 @@ class DataAnalysis(pretreatment, methods):
         data = self.read_txt(abspath+"//data//tongjiblog998.txt")
         #print mainAttraction
         data = self.trans_data(data, mainAttraction)
-        #print len(data),data[0]
-        attractionFP = self.attractionFP(data)
-        #print attractionFP
-    def main(self):
-        attractionList = [u"天安门",u"天坛",u"毛主席纪念堂",u"八达岭",u"故宫",u"北京大学",u"清华大学"]
-        recommand_rounte = self.recommandation(attractionList)
+        print len(data),data[0]
+        data = self.fixAttractionFP(data)
+        #self.writeMatrix(data, "998data.txt")
+        #attractionFP = self.attractionFP(data)
+        ##print type(attractionFP)
+        #candidate = []
+        #print len(attractionFP)
+        #for k,v in attractionFP.items():
+        #    #print k,v
+        #    #break
+        #    if v!=1:
+        #        candidate.append(k)
+        #print candidate
+        #for i in xrange(len(candidate)):
+        #    temp = candidate[i]
+        #    #print temp
+        #    self.main(temp)
+        #for i in xrange(9):
+        #    self.main(data[i])
+        self.main(list(set(data[8])))
+
+    def main(self,attractionList=[]):
+        #attractionList = [u"天安门",u"天坛",u"毛主席纪念堂",u"八达岭",u"故宫",u"北京大学",u"清华大学"]
+        #attractionList = [u"北京大学",u"清华大学",u"颐和园",u"圆明园"]
+        attractionList = [u"后海",u"西海",u"烟袋斜街",u"南锣鼓巷",u"前海",u"鸦儿胡同",u"恭王府",u"什刹海"]
+        recommand_rounte,district_route = self.recommandation(attractionList)
         print recommand_rounte
-        self.writeMatrix([recommand_rounte],"result.txt")
+        self.writeMatrix([recommand_rounte,district_route],"result.txt")
 
         
 
 
 if __name__ == '__main__':
     DataAnalysis().main()
+    #DataAnalysis().FP()
