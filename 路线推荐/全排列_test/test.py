@@ -9,6 +9,7 @@ def Mideng(li):
     head=bak.pop(i) #head of the recursive-produced value
     for j in Mideng(bak):
       j.insert(0,head)
+      print j
       result.append(j)
   #print li[:]
   return result

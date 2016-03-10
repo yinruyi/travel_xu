@@ -161,6 +161,7 @@ class methods():
             #a = ["a","b","d","c"]
             #print self.Permutations(a)
             rounte = self.Permutations(attractionList)
+            print u"全排列结束"
             for i in xrange(len(rounte)):
                 one_rounte = rounte[i]
                 point = self.rountePoint(one_rounte,pointTable)
@@ -255,7 +256,9 @@ class DataAnalysis(pretreatment, methods):
         #attractionList = [u"北京大学",u"清华大学",u"颐和园",u"圆明园"]
         #attractionList = [u"后海",u"西海",u"烟袋斜街",u"南锣鼓巷",u"前海",u"鸦儿胡同",u"恭王府",u"什刹海"]
         #attractionList = [u"皇穹宇",u"文津街",u"北海公园",u"长安街",u"王府井大街",u"人民英雄纪念碑",u"大栅栏",u"毛主席纪念堂",u"王府井",u"天坛",u"正阳门",u"故宫",u"景山公园",u"天安门广场",u"祈年殿",u"箭楼",u"人民大会堂",u"天安门"]
-        attractionList = [u"水立方",u"皇穹宇",u"北京大学",u"后海",u"安定门",u"八达岭"]
+        #attractionList = [u"水立方",u"皇穹宇",u"北京大学",u"后海",u"安定门",u"八达岭"]
+        #attractionList = [u"长安街",u"人民英雄纪念碑",u"正阳门",u"毛主席纪念堂",u"天安门广场",u"箭楼",u"人民大会堂",u"天安门"]
+        attractionList = [u"皇穹宇",u"文津街",u"北海公园",u"王府井大街",u"大栅栏",u"王府井",u"天坛",u"故宫",u"景山公园",u"祈年殿",u"天安门"]
         recommand_rounte,district_route = self.recommandation(attractionList)
         print recommand_rounte
         self.writeMatrix([recommand_rounte,district_route],"result.txt")
